@@ -1,5 +1,5 @@
 CC       =  gcc
-CFLAGS   = -Wall -O2 -g
+CFLAGS   = -Wall -ansi -O2 -g
 LIB      = -lSDL -lGLU -lGL -lm  
 INCLUDES = 
 
