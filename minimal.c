@@ -1,11 +1,11 @@
 #include <SDL/SDL.h>
-/*
+
 #include <w32api/GL/gl.h>
 #include <w32api/GL/glu.h>
-*/
+/*
 #include <GL/gl.h>
 #include <GL/glu.h>
-
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -75,13 +75,13 @@ int main(int argc, char** argv) {
 
     /* Récupération du temps au début de la boucle */
     Uint32 startTime = SDL_GetTicks();
+    glClear(GL_COLOR_BUFFER_BIT);
 
     /* Placer ici le code de dessin */
     if ( mode == 1 ) {
       /* Mode selection des couleurs */
       drawColorSelectionView();   
     } else {
-      glClear(GL_COLOR_BUFFER_BIT);
       glColor3ub(0, 0, 255);
       drawPrimitives( primitives );
     }
@@ -225,8 +225,12 @@ void afficherPoint( Point * pt ) {
 }
 void drawPoints(PointList list) { 
   if ( list != NULL ) {
-    glVertex2f(-1 + 2. * list->x / WINDOW_WIDTH,
-                 -(-1 + 2. * list->y / WINDOW_HEIGHT));
+    glColor3ub(list->r, list->g, list->b);
+    
+    glVertex2f(-1 + 2. * list->x / WINDOW_WIDTH,                  -(-1 + 2. * list->y / WINDOW_HEIGHT));
+    /*
+    glVertex2f(list->x, list->y);
+    */
     drawPoints( list->next );
   } 
 }
@@ -265,7 +269,6 @@ void addPrimitive(Primitive* primitive, PrimitiveList* list) {
   *list = primitive;  
 }
 void deletePrimitives(PrimitiveList list) {
-  assert(list);
   if ( list != NULL ) {
     deletePoints( list->points );
     deletePrimitives( list->next );
