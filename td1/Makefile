@@ -1,7 +1,6 @@
 CC       =  gcc
-CFLAGS   = -Wall -ansi -O2 -g
-LIB      = -lSDL -lGLU -lGL -lm  
-INCLUDES = 
+CFLAGS   = -Wall -O2 -g
+LIB      = -L/usr/bin/ -lSDL -lglu32 -lopengl32 -lM
 
 OBJ      = minimal.o 
 RM       = rm -f
@@ -13,7 +12,7 @@ STDNAME  = $(DIRNAME).tgz
 all : $(BIN)
 
 $(BIN) : $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(LIB) $(INCLUDES)  -o $(BIN)
+	$(CC) $(CFLAGS) $(OBJ) $(LIB) $(INCLUDES) -o $(BIN)
 	@echo "--------------------------------------------------------------"
 	@echo "                 to execute type: ./$(BIN) &"
 	@echo "--------------------------------------------------------------"
