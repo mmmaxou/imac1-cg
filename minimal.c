@@ -14,10 +14,11 @@
 
 
 /* Dimensions de la fenêtre */
-static unsigned int WINDOW_WIDTH = 400;
-static unsigned int WINDOW_HEIGHT = 400;
+static unsigned int WINDOW_WIDTH = 800;
+static unsigned int WINDOW_HEIGHT = 800;
 void resizeWindow();
-void drawColorSelectionView();  
+void drawColorSelectionView();
+void closePath(SDL_Event *e, PrimitiveList *p);
 
 /* Nombre de bits par pixel de la fenêtre */
 static const unsigned int BIT_PER_PIXEL = 32;
@@ -25,19 +26,19 @@ static const unsigned int BIT_PER_PIXEL = 32;
 /* Nombre minimal de millisecondes separant le rendu de deux images */
 static const Uint32 FRAMERATE_MILLISECONDS = 1000 / 60;
 static const unsigned char COLORS[] = {
-     0, 0, 0 ,
-     255, 0, 0 ,
-     0, 255, 0 ,
-     0, 0, 255 ,
-     255, 255, 0 ,
-     255, 0, 255 ,
-     0, 255, 255 ,
-     255, 255, 255 
+  0, 0, 0 ,
+  255, 0, 0 ,
+  0, 255, 0 ,
+  0, 0, 255 ,
+  255, 255, 0 ,
+  255, 0, 255 ,
+  0, 255, 255 ,
+  255, 255, 255 
 };
 static const unsigned int NB_COLORS = sizeof(COLORS) / (3 * sizeof(unsigned char));
 
 int main(int argc, char** argv) {
-  
+
   /* Initialisation de la SDL */
   if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
     fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -56,8 +57,8 @@ int main(int argc, char** argv) {
   SDL_WM_SetCaption("J'aime les pates au beurre", NULL);
   glClearColor(0.1, 0.5, 0.8, 1);
   glClear(GL_COLOR_BUFFER_BIT);
-  
-  
+
+
   /* Primitives a dessiner */
   PrimitiveList primitives = NULL;
   Point *current = NULL;
@@ -98,23 +99,29 @@ int main(int argc, char** argv) {
         loop = 0;
         break;
       }
-      
-      
-    /* Quelques exemples de traitement d'evenements : */
+
+
+      /* Quelques exemples de traitement d'evenements : */
       switch(e.type) {
 
           /* Clic souris */
         case SDL_MOUSEBUTTONUP:
-          if ( mode == 1 ) {
-            /* Selection de couleur */
-            currentColor = e.button.x * NB_COLORS / WINDOW_WIDTH;
-            printf("Current color: %d\n", currentColor);
-          } else {
-            /* Dessin */
-            current = allocPoint( (int) e.button.x , (int) e.button.y, COLORS[currentColor * 3], COLORS[currentColor * 3 + 1], COLORS[currentColor * 3 + 2]);
-            addPoint(current, &primitives->points);
+          if ( e.button.button == SDL_BUTTON_LEFT ) {
+
+            if ( mode == 1 ) {
+              /* Selection de couleur */
+              currentColor = e.button.x * NB_COLORS / WINDOW_WIDTH;
+              printf("Current color: %d\n", currentColor);
+            } else {
+              /* Dessin */
+              current = allocPoint( (int) e.button.x , (int) e.button.y, COLORS[currentColor * 3], COLORS[currentColor * 3 + 1], COLORS[currentColor * 3 + 2]);
+              addPoint(current, &primitives->points);
+            }
           }
-          /* affichePrimitives( primitives ); */ 
+          break;
+
+        case SDL_MOUSEBUTTONDOWN:
+          closePath(&e, &primitives);
           break;
 
           /* Touche clavier */
@@ -128,7 +135,7 @@ int main(int argc, char** argv) {
             break;
           }
           break;
-          
+
         case SDL_KEYUP:
           if(e.key.keysym.sym == SDLK_SPACE) {
             mode = 0;
@@ -136,22 +143,26 @@ int main(int argc, char** argv) {
             switch(e.key.keysym.sym) {
               case SDLK_p:
                 addPrimitive(allocPrimitive(GL_POINTS), &primitives);      
-        printf("Points\n");
+                printf("Points\n");
                 break;
               case SDLK_l:
                 addPrimitive(allocPrimitive(GL_LINES), &primitives);
-        printf("Lignes\n");
+                printf("Lignes\n");
                 break;
               case SDLK_t:
                 addPrimitive(allocPrimitive(GL_TRIANGLES), &primitives);
-        printf("Triangles\n");
+                printf("Triangles\n");
+                break;
+              case SDLK_s:
+                addPrimitive(allocPrimitive(GL_LINE_STRIP), &primitives);
+                printf("Strip Lines\n");
                 break;
               default:
                 break;
             }            
           }
           break;
-          
+
         case SDL_VIDEORESIZE:
           WINDOW_WIDTH = e.resize.w;
           WINDOW_HEIGHT = e.resize.h;
@@ -195,13 +206,13 @@ void drawColorSelectionView() {
   int i;
   GLfloat dx = 2.f / NB_COLORS;
   glBegin(GL_QUADS);
-    for(i = 0; i < NB_COLORS; ++i) {
-      glColor3ubv(COLORS + i * 3);      
-      glVertex2f(-1 + i * dx, -1);
-      glVertex2f(-1 + (i + 1) * dx, -1);
-      glVertex2f(-1 + (i + 1) * dx, 1);
-      glVertex2f(-1 + i * dx, 1);
-    }
+  for(i = 0; i < NB_COLORS; ++i) {
+    glColor3ubv(COLORS + i * 3);      
+    glVertex2f(-1 + i * dx, -1);
+    glVertex2f(-1 + (i + 1) * dx, -1);
+    glVertex2f(-1 + (i + 1) * dx, 1);
+    glVertex2f(-1 + i * dx, 1);
+  }
   glEnd();
 }
 
@@ -226,7 +237,7 @@ void afficherPoint( Point * pt ) {
 void drawPoints(PointList list) { 
   if ( list != NULL ) {
     glColor3ub(list->r, list->g, list->b);
-    
+
     glVertex2f(-1 + 2. * list->x / WINDOW_WIDTH,                  -(-1 + 2. * list->y / WINDOW_HEIGHT));
     /*
     glVertex2f(list->x, list->y);
@@ -251,10 +262,10 @@ void deletePoints(PointList list) {
 }
 Primitive* allocPrimitive(GLenum primitiveType) {
   Primitive *tmp = (Primitive*) malloc( sizeof( Primitive ));
-   if ( tmp ) {
-     tmp->primitiveType = primitiveType;
-     tmp->points = NULL;
-     tmp->next = NULL;
+  if ( tmp ) {
+    tmp->primitiveType = primitiveType;
+    tmp->points = NULL;
+    tmp->next = NULL;
     return tmp;
   } else {
     fprintf(stderr, "Allocation mémoire de la Primitive échouée. Fin du programme.\n");
@@ -295,5 +306,14 @@ void affichePrimitives(PrimitiveList list) {
       current = current->next;
     }
     list = list->next;        
+  }
+}
+
+void closePath(SDL_Event *e, PrimitiveList *p) {
+  if ( e->button.button == SDL_BUTTON_RIGHT 
+      && (*p)->primitiveType == GL_LINE_STRIP ) {
+    printf("click droit\n");
+    (*p)->primitiveType = GL_LINE_LOOP;
+    addPrimitive(allocPrimitive(GL_LINE_STRIP), p);
   }
 }
