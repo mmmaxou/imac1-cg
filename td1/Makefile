@@ -1,6 +1,7 @@
 CC       =  gcc
 CFLAGS   = -Wall -O2 -g
-LIB      = -L/usr/bin/ -lSDL -lglu32 -lopengl32 -lM
+# LIB      = -L/usr/bin/ -lSDL -lglu32 -lopengl32 -lM
+LIB      = -lSDL -lGLU -lGL -lm
 
 OBJ      = minimal.o 
 RM       = rm -f
