@@ -1,11 +1,11 @@
 #include <SDL/SDL.h>
-
+/*
 #include <w32api/GL/gl.h>
 #include <w32api/GL/glu.h>
-/*
+*/
 #include <GL/gl.h>
 #include <GL/glu.h>
-*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
