@@ -22,13 +22,13 @@
 static unsigned int WINDOW_WIDTH = 800;
 static unsigned int WINDOW_HEIGHT = 600;
 void resizeWindow();
-void normalized_glVertex2f(int x, int y);
 void drawSquare(int full);
 void drawLandmark();
 void drawCircle(int full);
 void drawRoundedSquare(float sphereRadius, int full);
 void drawFirstArm(int full);
 void drawSecondArm(int full);
+void drawThirdArm(int full);
 
 /* Nombre de bits par pixel de la fenêtre */
 static const unsigned int BIT_PER_PIXEL = 32;
@@ -84,10 +84,22 @@ int main(int argc, char** argv) {
     glPopMatrix();
     
     glPushMatrix();
-      glTranslatef(-1, 2, 0);
+      glTranslatef(0, 2, 0);
       glScalef(0.5, 0.5, 1);
-      drawFirstArm( 0 );
+      drawFirstArm( 1 );
     glPopMatrix();
+        
+    glPushMatrix();
+      glTranslatef(-3, 0, 0);
+      glScalef(0.5, 0.5, 1);
+      drawSecondArm( 0 );
+    glPopMatrix();
+    
+    glPushMatrix();
+      glScalef(0.5, 0.5, 1);
+      drawThirdArm( 0 );
+    glPopMatrix();
+    
     
     
        
@@ -168,9 +180,6 @@ void resizeWindow() {
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-}
-void normalized_glVertex2f(int x, int y) {
-  glVertex2f(-1+2.*x/WINDOW_WIDTH,-(-1+2.*y/WINDOW_HEIGHT)); 
 }
 void drawSquare(int full) {
   if ( full == 1 )
@@ -272,5 +281,42 @@ void drawFirstArm(int full) {
   
 }
 void drawSecondArm(int full) {
+  
+  float round = 0.2;
+  
+  drawRoundedSquare( round, full );
+  
+  glPushMatrix();
+    glTranslatef(4, 0, 0);
+    drawRoundedSquare( round, full );    
+  glPopMatrix();
+  
+  
+  glPushMatrix();
+    glTranslatef(2, 0, 0);
+    glScalef( ( 5-round*2 ), 1-round*2, 1);
+    drawSquare( full );
+  glPopMatrix();
+    
+}
+void drawThirdArm(int full) {
+  
+  glPushMatrix();
+    glScalef(0.6, 0.6, 0);
+    drawRoundedSquare( 0.2, full );    
+  glPopMatrix();
+  
+  glPushMatrix();
+    glTranslatef(3.5, 0, 0);
+    glScalef(0.8, 0.8, 1);
+    drawCircle( full );    
+  glPopMatrix();
+  
+  glPushMatrix();
+    glTranslatef(1.75, 0, 0);
+    glScalef(3.5, 0.4, 1);
+    drawSquare( full );    
+  glPopMatrix();
+  
   
 }
