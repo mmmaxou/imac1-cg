@@ -18,10 +18,41 @@ void resizeViewport() {
     SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_RESIZABLE);
 }
 
-const char* filename = "logo_imac_400x400.jpg";
+void setTexture ( int i, GLuint *textures ) {
+  SDL_Surface *image = NULL;
+  char filepath[100];
+  if ( i == 10 ) {
+    image = IMG_Load("./numbers/colon.png");    
+  } else {
+    sprintf(filepath, "./numbers/%d.png", i);
+    image = IMG_Load(filepath);
+  }
+  if ( image ) {
+    glBindTexture(GL_TEXTURE_2D, textures[i]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        GL_RGBA,
+        image->w,
+        image->h,
+        0,
+        GL_RGBA,
+        GL_UNSIGNED_BYTE,
+        image->pixels);
+    
+    glBindTexture(GL_TEXTURE_2D, 0);
+    // FREE
+    SDL_FreeSurface( image );
+  } else {
+    printf("Erreur chargement image %d ( jpg )\n", i);
+  }
+  
+}
 
 int main(int argc, char** argv) {
-
+    int i;
     // Initialisation de la SDL
     if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -36,38 +67,20 @@ int main(int argc, char** argv) {
     SDL_WM_SetCaption("td04", NULL);
     resizeViewport();
 
-    // TODO: Chargement et traitement de la texture    
-  
-    SDL_Surface *image = IMG_Load("./logo_imac_400x400.jpg");
-    GLuint textureID;
-  
-    if ( image ) {
-      glGenTextures(1, &textureID);
-      glBindTexture(GL_TEXTURE_2D, textureID);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      
-      glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
-        GL_RGB,
-        image->w,
-        image->h,
-        0,
-        GL_RGB,
-        GL_UNSIGNED_BYTE,
-        image->pixels);
-      
-      /* Unbinding texture */
-      glBindTexture(GL_TEXTURE_2D, 0);
-    } else {
-      printf("Erreur chargement image 1 ( jpg )\n");
+    // TODO: Chargement et traitement de la texture      
+    GLuint textureID[11];
+    glGenTextures(1, textureID);
+    for ( i=0; i<11; i++ ) {
+      setTexture(i, textureID);
     }
 
     /* Boucle de dessin (à décommenter pour l'exercice 3) */
     int loop = 1;
-    float angle = 0;
-    glClearColor(0.0, 0.0, 0.0 ,1.0);
+    glClearColor(0.0, 0.0, 0.0 ,1.0);    
   
+    /* Active la transparence */
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
   
     while(loop) {
@@ -79,31 +92,37 @@ int main(int argc, char** argv) {
       glClear(GL_COLOR_BUFFER_BIT);
       
       
-      /* Active le rendu */
-      glEnable(GL_TEXTURE_2D);
-      glBindTexture(GL_TEXTURE_2D, textureID);
       
-      angle += 2;
-      glPushMatrix();
-        glRotatef(angle, 1, 1, 1);
+      for ( i=0; i<11; i++ ) {
+        /* Active l'image */
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureID[i]);
+        
+        int scale = 25;
+        float w = 26 / scale;
+        float h = 42 / scale;
+        
         glBegin(GL_QUADS);
           glTexCoord2f(0, 0);
-          glVertex2f(-0.5, 0.5);
+          glVertex2f(-w/2, h/2);
 
           glTexCoord2f(1, 0);
-          glVertex2f(0.5, 0.5);
+          glVertex2f(w/2, h/2);
 
           glTexCoord2f(1, 1);
-          glVertex2f(0.5, -0.5);      
+          glVertex2f(w/2, -h/2);      
 
           glTexCoord2f(0, 1);
-          glVertex2f(-0.5, -0.5);
-        glEnd();
-      glPopMatrix();
+          glVertex2f(-w/2, -h/2);
+        glEnd();        
+        
+        glBindTexture(GL_TEXTURE_2D, 0);
+        /* Desactive l'image */      
+        glDisable(GL_TEXTURE_2D);
+      }
       
-      /* Desactive l'image */
-      glDisable(GL_TEXTURE_2D);
-      glBindTexture(GL_TEXTURE_2D, 0);
+      
+      
       
       
       // Fin du code de dessin
@@ -140,19 +159,13 @@ int main(int argc, char** argv) {
       if(elapsedTime < FRAMERATE_MILLISECONDS) {
           SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
       }
-    }
-    
+    }    
 
     // TODO: Libération des données GPU
-    SDL_FreeSurface( image );
-    glDeleteTextures(1, &textureID);
+    glDeleteTextures(11, textureID);
 
     // Liberation des ressources associées à la SDL
     SDL_Quit();
 
     return EXIT_SUCCESS;
-}
-
-void setTexture ( int filepath ) {
-  
 }
