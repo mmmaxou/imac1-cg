@@ -26,9 +26,9 @@ void drawSquare(int full);
 void drawLandmark();
 void drawCircle(int full);
 void drawRoundedSquare(float sphereRadius, int full);
-void drawFirstArm(int full);
-void drawSecondArm(int full);
-void drawThirdArm(int full);
+GLuint drawFirstArmIDList(int full);
+GLuint drawSecondArmIDList(int full);
+GLuint drawThirdArmIDList(int full);
 
 /* Nombre de bits par pixel de la fenêtre */
 static const unsigned int BIT_PER_PIXEL = 32;
@@ -64,7 +64,24 @@ int main(int argc, char** argv) {
   /* Boucle d'affichage */
   int loop = 1;
   
+  float alpha = 45;
+  float beta = -10;
+  float gamma1 = 15;
+  float gamma2 = 10;
+  float gamma3 = 20;
+  
+  const float scale = 0.5;
+  const int full = 0;
+  
+  const GLuint firstArm = drawFirstArmIDList(full);
+  const GLuint secondArm = drawSecondArmIDList(full);
+  const GLuint thirdArm = drawThirdArmIDList(full);
+  
+    
   srand(time(NULL));
+  
+
+  
 
   while(loop) {
 
@@ -75,34 +92,36 @@ int main(int argc, char** argv) {
     /* Placer ici le code de dessin */
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
     glColor3ub(255, 0, 0);
     
-    glPushMatrix();
-      glTranslatef(-3, 2, 0);
-      drawRoundedSquare( 0.2, 0 );
-    glPopMatrix();
-    
-    glPushMatrix();
-      glTranslatef(0, 2, 0);
-      glScalef(0.5, 0.5, 1);
-      drawFirstArm( 1 );
-    glPopMatrix();
-        
-    glPushMatrix();
-      glTranslatef(-3, 0, 0);
-      glScalef(0.5, 0.5, 1);
-      drawSecondArm( 0 );
-    glPopMatrix();
-    
-    glPushMatrix();
-      glScalef(0.5, 0.5, 1);
-      drawThirdArm( 0 );
-    glPopMatrix();
+    /* Dessin du bras complet */    
+    glScalef(scale, scale, 1);
+    glRotatef(alpha, 0, 0, 1);
+    glCallList(firstArm);
+
+    glTranslatef(3, 0, 0);
+    glRotatef(beta, 0, 0, 1);
+    glCallList(secondArm);
+
+    glTranslatef(2, 0, 0);
+    glRotatef(gamma1, 0, 0, 1);
+    glCallList(thirdArm);
+
+    glRotatef(gamma2, 0, 0, 1);
+    glCallList(thirdArm);
+
+    glRotatef(gamma3, 0, 0, 1);
+    glCallList(thirdArm);
     
     
+    alpha += 0.5;
+    beta -= 1;
+    gamma1 -= 0.3;
+    gamma2 += 0.2;
+    gamma3 += 0.4;
     
-       
+  
+    
 
     /* Echange du front et du back buffer : mise à jour de la fenêtre */
     SDL_GL_SwapBuffers();
@@ -125,8 +144,7 @@ int main(int argc, char** argv) {
         case SDL_MOUSEBUTTONUP:
           break;
 
-        case SDL_MOUSEBUTTONDOWN:
-          
+        case SDL_MOUSEBUTTONDOWN:          
           break;
           
         case SDL_MOUSEMOTION:
@@ -258,48 +276,58 @@ void drawRoundedSquare(float sphereRadius, int full) {
   
   glPopMatrix();  
 }
-void drawFirstArm(int full) {
-  glPushMatrix();
-    glScalef(2, 2, 1);
-    drawCircle( full );
-  glPopMatrix();
+GLuint drawFirstArmIDList(int full) {
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
   
-  glPushMatrix();
-    glTranslatef(3, 0, 0);
-    drawCircle( full );
-  glPopMatrix();
+    glPushMatrix();
+      glScalef(2, 2, 1);
+      drawCircle( full );
+    glPopMatrix();
+
+    glPushMatrix();
+      glTranslatef(3, 0, 0);
+      drawCircle( full );
+    glPopMatrix();
+
+    if ( full )
+      glBegin(GL_QUADS);
+    else 
+      glBegin(GL_LINE_LOOP);
+    glVertex2f(0, 1);
+    glVertex2f(3, 0.5);
+    glVertex2f(3, -0.5);
+    glVertex2f(0, -1);
+    glEnd();
   
-  if ( full )
-    glBegin(GL_QUADS);
-  else 
-    glBegin(GL_LINE_LOOP);
-  glVertex2f(0, 1);
-  glVertex2f(3, 0.5);
-  glVertex2f(3, -0.5);
-  glVertex2f(0, -1);
-  glEnd();
-  
+  glEndList();
+  return id;
 }
-void drawSecondArm(int full) {
+GLuint drawSecondArmIDList(int full) {
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
   
-  float round = 0.2;
-  
+  float round = 0.2;  
   drawRoundedSquare( round, full );
   
   glPushMatrix();
-    glTranslatef(4, 0, 0);
+    glTranslatef(2, 0, 0);
     drawRoundedSquare( round, full );    
   glPopMatrix();
   
   
   glPushMatrix();
-    glTranslatef(2, 0, 0);
-    glScalef( ( 5-round*2 ), 1-round*2, 1);
+    glTranslatef(1, 0, 0);
+    glScalef( ( 3-round*2 ), 1-round*2, 1);
     drawSquare( full );
   glPopMatrix();
-    
+  
+  glEndList();
+  return id;
 }
-void drawThirdArm(int full) {
+GLuint drawThirdArmIDList(int full) {
+  GLuint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
   
   glPushMatrix();
     glScalef(0.6, 0.6, 0);
@@ -307,16 +335,17 @@ void drawThirdArm(int full) {
   glPopMatrix();
   
   glPushMatrix();
-    glTranslatef(3.5, 0, 0);
+    glTranslatef(2, 0, 0);
     glScalef(0.8, 0.8, 1);
     drawCircle( full );    
   glPopMatrix();
   
   glPushMatrix();
-    glTranslatef(1.75, 0, 0);
-    glScalef(3.5, 0.4, 1);
+    glTranslatef(1, 0, 0);
+    glScalef(2, 0.4, 1);
     drawSquare( full );    
   glPopMatrix();
   
-  
+  glEndList();
+  return id;
 }
