@@ -13,8 +13,8 @@
 #include <time.h>
 
 #define SEG_NUMBER 50
-#define PI 3.141592
 #define SEG_SPACE PI/SEG_NUMBER
+#define PI 3.141592
 #define NB_FIG 5
 
 
@@ -22,8 +22,8 @@
 static unsigned int WINDOW_WIDTH = 800;
 static unsigned int WINDOW_HEIGHT = 600;
 void resizeWindow();
-void drawSquare(int full);
 void drawLandmark();
+void drawSquare(int full);
 void drawCircle(int full);
 void drawRoundedSquare(float sphereRadius, int full);
 GLuint drawFirstArmIDList(int full);
@@ -199,17 +199,6 @@ void resizeWindow() {
   glClear(GL_COLOR_BUFFER_BIT);
 
 }
-void drawSquare(int full) {
-  if ( full == 1 )
-    glBegin(GL_QUADS);
-  else
-    glBegin(GL_LINE_LOOP);
-  glVertex2f(-0.5, -0.5);
-  glVertex2f(-0.5, 0.5);
-  glVertex2f(0.5, 0.5);
-  glVertex2f(0.5, -0.5);
-  glEnd();
-}
 void drawLandmark() {  
   glColor3ub(255, 0, 0);
   glBegin(GL_LINES);
@@ -221,6 +210,17 @@ void drawLandmark() {
   glVertex2f(0, 1);
   glEnd();
 
+}
+void drawSquare(int full) {
+  if ( full == 1 )
+    glBegin(GL_QUADS);
+  else
+    glBegin(GL_LINE_LOOP);
+  glVertex2f(-0.5, -0.5);
+  glVertex2f(-0.5, 0.5);
+  glVertex2f(0.5, 0.5);
+  glVertex2f(0.5, -0.5);
+  glEnd();
 }
 void drawCircle(int full) {
   int i;
