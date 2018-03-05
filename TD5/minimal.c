@@ -46,17 +46,11 @@ int main(int argc, char** argv) {
 
   /* Boucle de dessin (à décommenter pour l'exercice 3) */
   int loop = 1;
-  int angle = 0;
   glClearColor(0.1, 0.1, 0.1 ,1.0);    
   
   /* TIME */
   time_t rawtime;
   struct tm * timeinfo;
-  time(&rawtime);
-  timeinfo = localtime(&rawtime);
-  printf(“hours %d\n”, timeinfo->tm_hour);
-  printf(“minutes %d\n”, timeinfo->tm_min);
-  printf(“seconds %d\n”, timeinfo->tm_sec);
 
   while(loop) {
 
@@ -66,14 +60,13 @@ int main(int argc, char** argv) {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // ROTATING CLOCK
-    /*
-    angle++;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
     drawClock();
     glColor3ub(0,0,0);
-    drawSmallNeedle(angle * 3);
-    drawMiddleNeedle(angle * 2);
-    drawLargeNeedle(angle);
-    */
+    drawSmallNeedle(timeinfo->tm_sec * 6);
+    drawMiddleNeedle(timeinfo->tm_min * 6 + (timeinfo->tm_sec/10));
+    drawLargeNeedle(timeinfo->tm_hour * 30 + (timeinfo->tm_min/2));
 
     // Fin du code de dessin
 
