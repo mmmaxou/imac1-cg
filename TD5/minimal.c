@@ -23,6 +23,7 @@ void resizeViewport();
 
 /* CE TP */
 void drawClock();
+void drawSmallNeedle( int angle );
 
 int main(int argc, char** argv) {
     // Initialisation de la SDL
@@ -52,6 +53,7 @@ int main(int argc, char** argv) {
       glClear(GL_COLOR_BUFFER_BIT);
             
       drawClock();
+      drawSmallNeedle();
       
       
       // Fin du code de dessin
@@ -146,7 +148,7 @@ void drawClock() {
   int i;
   int angle = 0;
   float SCALE = 0.005;
-  int SCALE_Y = 8;
+  int SCALE_X = 8;
   // Cercles
   glPushMatrix();
     // Cercle exterieur 1
@@ -173,7 +175,7 @@ void drawClock() {
       glTranslatef(0.8, 0, 0);
     
       // Ellongation
-      glScalef(SCALE_Y, 1, 1);
+      glScalef(SCALE_X, 1, 1);
       // Mise a l'echelle
       glScalef(SCALE, SCALE, 1);
     
@@ -186,5 +188,22 @@ void drawClock() {
     
     angle += 6;
   }
+}
+void drawSmallNeedle( int angle ) {
+  float SCALE = 0.005;
+  int SCALE_X = 20;
+  
+  glPushMatrix();
+      glColor3ub(0,0,0);
+      glRotatef(angle, 0, 0, 1);
+      // Deplacement
+      glTranslatef(0.4, 0, 0);    
+      // Ellongation
+      glScalef(SCALE_X, 1, 1);
+      // Mise a l'echelle
+      glScalef(SCALE, SCALE, 1);  
+      drawSquare(1);
+    glPopMatrix();
+  
 }
 
