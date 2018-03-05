@@ -24,6 +24,8 @@ void resizeViewport();
 /* CE TP */
 void drawClock();
 void drawSmallNeedle( int angle );
+void drawMiddleNeedle( int angle );
+void drawLargeNeedle( int angle );
 
 int main(int argc, char** argv) {
     // Initialisation de la SDL
@@ -43,6 +45,7 @@ int main(int argc, char** argv) {
 
     /* Boucle de dessin (à décommenter pour l'exercice 3) */
     int loop = 1;
+    int angle = 0;
     glClearColor(0.1, 0.1, 0.1 ,1.0);    
     
     while(loop) {
@@ -51,10 +54,13 @@ int main(int argc, char** argv) {
 
       // TODO: Code de dessin
       glClear(GL_COLOR_BUFFER_BIT);
-            
-      drawClock();
-      drawSmallNeedle();
       
+      angle++;
+      drawClock();
+      glColor3ub(0,0,0);
+      drawSmallNeedle(angle * 3);
+      drawMiddleNeedle(angle * 2);
+      drawLargeNeedle(angle);
       
       // Fin du code de dessin
 
@@ -190,20 +196,38 @@ void drawClock() {
   }
 }
 void drawSmallNeedle( int angle ) {
-  float SCALE = 0.005;
-  int SCALE_X = 20;
+  float SCALE_X = 0.01;
+  float SCALE_Y = 1;
   
   glPushMatrix();
-      glColor3ub(0,0,0);
-      glRotatef(angle, 0, 0, 1);
-      // Deplacement
-      glTranslatef(0.4, 0, 0);    
-      // Ellongation
-      glScalef(SCALE_X, 1, 1);
-      // Mise a l'echelle
-      glScalef(SCALE, SCALE, 1);  
-      drawSquare(1);
-    glPopMatrix();
+    glRotatef(-angle, 0, 0, 1);
+    glTranslatef(0, SCALE_Y * 0.4, 0);    
+    glScalef(SCALE_X, SCALE_Y, 1);
+    drawSquare(1);
+  glPopMatrix();
   
+}
+void drawMiddleNeedle( int angle ) {
+  float SCALE_X = 0.02;
+  float SCALE_Y = 0.85;
+  
+  glPushMatrix();
+    glRotatef(-angle, 0, 0, 1);
+    glTranslatef(0, SCALE_Y * 0.4, 0);    
+    glScalef(SCALE_X, SCALE_Y, 1);
+    drawSquare(1);
+  glPopMatrix();
+  
+}
+void drawLargeNeedle( int angle ) {
+  float SCALE_X = 0.03;
+  float SCALE_Y = 0.7;
+  
+  glPushMatrix();
+    glRotatef(-angle, 0, 0, 1);
+    glTranslatef(0, SCALE_Y * 0.4, 0);    
+    glScalef(SCALE_X, SCALE_Y, 1);
+    drawSquare(1);
+  glPopMatrix();
 }
 
