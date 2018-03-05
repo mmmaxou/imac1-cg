@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 
 #define SEG_NUMBER 50
 #define SEG_SPACE PI/SEG_NUMBER
@@ -28,80 +29,92 @@ void drawMiddleNeedle( int angle );
 void drawLargeNeedle( int angle );
 
 int main(int argc, char** argv) {
-    // Initialisation de la SDL
-    if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
-        fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
-        return EXIT_FAILURE;
-    }
+  // Initialisation de la SDL
+  if(-1 == SDL_Init(SDL_INIT_VIDEO)) {
+      fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
+      return EXIT_FAILURE;
+  }
 
-    // Ouverture d'une fenêtre et création d'un contexte OpenGL
-    if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_RESIZABLE)) {
-        fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
-        return EXIT_FAILURE;
-    }
-    SDL_WM_SetCaption("C L O C K", NULL);
-    resizeViewport();
+  // Ouverture d'une fenêtre et création d'un contexte OpenGL
+  if(NULL == SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_RESIZABLE)) {
+      fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
+      return EXIT_FAILURE;
+  }
+  SDL_WM_SetCaption("C L O C K", NULL);
+  resizeViewport();
 
 
-    /* Boucle de dessin (à décommenter pour l'exercice 3) */
-    int loop = 1;
-    int angle = 0;
-    glClearColor(0.1, 0.1, 0.1 ,1.0);    
-    
-    while(loop) {
+  /* Boucle de dessin (à décommenter pour l'exercice 3) */
+  int loop = 1;
+  int angle = 0;
+  glClearColor(0.1, 0.1, 0.1 ,1.0);    
+  
+  /* TIME */
+  time_t rawtime;
+  struct tm * timeinfo;
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
+  printf(“hours %d\n”, timeinfo->tm_hour);
+  printf(“minutes %d\n”, timeinfo->tm_min);
+  printf(“seconds %d\n”, timeinfo->tm_sec);
 
-      Uint32 startTime = SDL_GetTicks();
+  while(loop) {
 
-      // TODO: Code de dessin
-      glClear(GL_COLOR_BUFFER_BIT);
-      
-      angle++;
-      drawClock();
-      glColor3ub(0,0,0);
-      drawSmallNeedle(angle * 3);
-      drawMiddleNeedle(angle * 2);
-      drawLargeNeedle(angle);
-      
-      // Fin du code de dessin
+    Uint32 startTime = SDL_GetTicks();
 
-      SDL_Event e;
-      while(SDL_PollEvent(&e)) {
+    // TODO: Code de dessin
+    glClear(GL_COLOR_BUFFER_BIT);
 
-        switch(e.type) {
+    // ROTATING CLOCK
+    /*
+    angle++;
+    drawClock();
+    glColor3ub(0,0,0);
+    drawSmallNeedle(angle * 3);
+    drawMiddleNeedle(angle * 2);
+    drawLargeNeedle(angle);
+    */
 
-          case SDL_QUIT:
-              loop = 0;
-              break;
-            
-          /* Touche clavier */
-          case SDL_KEYDOWN:
-            if (e.key.keysym.sym == SDLK_q) {
-              loop = 0;
-              printf("Quit\n");
-            }
+    // Fin du code de dessin
+
+    SDL_Event e;
+    while(SDL_PollEvent(&e)) {
+
+      switch(e.type) {
+
+        case SDL_QUIT:
+            loop = 0;
             break;
 
-          case SDL_VIDEORESIZE:
-              WINDOW_WIDTH = e.resize.w;
-              WINDOW_HEIGHT = e.resize.h;
-              resizeViewport();
+        /* Touche clavier */
+        case SDL_KEYDOWN:
+          if (e.key.keysym.sym == SDLK_q) {
+            loop = 0;
+            printf("Quit\n");
+          }
+          break;
 
-          default:
-              break;
-        }
+        case SDL_VIDEORESIZE:
+            WINDOW_WIDTH = e.resize.w;
+            WINDOW_HEIGHT = e.resize.h;
+            resizeViewport();
+
+        default:
+            break;
       }
+    }
 
-      SDL_GL_SwapBuffers();
-      Uint32 elapsedTime = SDL_GetTicks() - startTime;
-      if(elapsedTime < FRAMERATE_MILLISECONDS) {
-          SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
-      }
-    }    
+    SDL_GL_SwapBuffers();
+    Uint32 elapsedTime = SDL_GetTicks() - startTime;
+    if(elapsedTime < FRAMERATE_MILLISECONDS) {
+        SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
+    }
+  }    
 
-    // Liberation des ressources associées à la SDL
-    SDL_Quit();
+  // Liberation des ressources associées à la SDL
+  SDL_Quit();
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
 
 void drawLandmark() {  
