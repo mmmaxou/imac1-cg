@@ -102,6 +102,9 @@ int main(int argc, char** argv) {
             printf("Quit\n");
           }
           break;
+          
+        case SDL_MOUSEWHEEL:
+          printf("Wheel: %d", e.wheel.y);
 
         case SDL_VIDEORESIZE:
             WINDOW_WIDTH = e.resize.w;
