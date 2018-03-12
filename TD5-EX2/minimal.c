@@ -13,16 +13,18 @@
 #define PI 3.141592
 
 #define ORBITAL_BODIES 20
+#define ORBITAL_SPEED_DIVIDER 30
+#define WINDOW_SCALE 60
+#define ORBITAL_BODIES_SCALE 20
 
 typedef struct planet {
   char name[100];
-  float size;
-  float sun_dist;
-  float rot_speed;
+  float size; // Given in AU
+  float sun_dist; // Given in AU
+  float rot_speed; // Given in km/s
   float angle;
   int r, g, b;
 } *Planet;
-
 
 static unsigned int WINDOW_WIDTH = 800;
 static unsigned int WINDOW_HEIGHT = 800;
@@ -59,7 +61,14 @@ int main(int argc, char** argv) {
     systemeSolaire[i] = NULL;
   }
   systemeSolaire[0] = createPlanet("sun", 0.0047, 0, 0, 255, 204, 0);
-  systemeSolaire[2] = createPlanet("earth", 0.005, 0.2, 1, 255, 204, 0);
+  systemeSolaire[1] = createPlanet("mercury", 0.00001626, 0.466, 47, 51, 51, 51);
+  systemeSolaire[2] = createPlanet("venus", 0.00004034, 0.728, 35, 155, 155, 155);
+  systemeSolaire[3] = createPlanet("earth", 0.00004247, 1, 30, 51, 153, 255);
+  systemeSolaire[4] = createPlanet("mars", 0.000022593, 1.666, 24, 255, 153, 51);
+  systemeSolaire[5] = createPlanet("jupiter", 0.000466667, 5.458, 13, 255, 204, 102);
+  systemeSolaire[6] = createPlanet("saturn", 0.0004, 10.123, 9, 255, 51, 204);
+  systemeSolaire[7] = createPlanet("uranus", 0.000166, 20.11, 6.8, 102, 204, 255);
+  systemeSolaire[8] = createPlanet("neptune", 0.00016, 30.33, 5.43, 102, 204, 255);
 
   int loop = 1;
   glClearColor(0.1, 0.1, 0.1 ,1.0); 
@@ -139,15 +148,15 @@ void drawPlanet(Planet p) {
     glColor3ub(p->r, p->g, p->b);
     glRotatef(p->angle, 0, 0, 1);
     glTranslatef(0, p->sun_dist, 0);
-    glScalef(p->size, p->size, 1);
+    glScalef(p->size, p->size, 1);      
+    glScalef(WINDOW_SCALE * ORBITAL_BODIES_SCALE, WINDOW_SCALE * ORBITAL_BODIES_SCALE, 1);      
     drawCircle(1);
   glPopMatrix();
   
   if ( p->rot_speed != 0 ) {
-    p->angle += p->rot_speed;
+    p->angle += p->rot_speed / ORBITAL_SPEED_DIVIDER;
   }
 }
-
 void drawLandmark() {  
   glColor3ub(255, 0, 0);
   glBegin(GL_LINES);
@@ -187,10 +196,9 @@ void drawCircle(int full) {
   glEnd();
 }
 void resizeViewport() {
-  int SIZE = 0.5;
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(-SIZE/2, SIZE/2, -SIZE/2, SIZE/2);
+  gluOrtho2D(-WINDOW_SCALE/2, WINDOW_SCALE/2, -WINDOW_SCALE/2, WINDOW_SCALE/2);
   SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL | SDL_RESIZABLE);
 }
