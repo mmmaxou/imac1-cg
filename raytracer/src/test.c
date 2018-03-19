@@ -62,8 +62,8 @@ int TEST_vector_from_A_B() {
 	float x2 = 25.5;
 	float y2 = -5;
 	float z2 = -63.5;
-	Vector3D v1 = vectorXYZ(x1, y1, z1);
-	Vector3D v2 = vectorXYZ(x2, y2, z2);
+	Point3D v1 = pointXYZ(x1, y1, z1);
+	Point3D v2 = pointXYZ(x2, y2, z2);
 	
 	Vector3D v = vector(v2, v1);
 	fail += v.x == x2-x1 ? 0 : 1;
