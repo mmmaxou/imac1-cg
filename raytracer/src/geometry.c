@@ -34,7 +34,13 @@ Vector3D vector(Point3D A, Point3D B) {
 Point3D pointPlusVector(Point3D P, Vector3D V);
 
 /* Addition de vecteurs */
-Vector3D addVectors(Vector3D A, Vector3D B);
+Vector3D addVectors(Vector3D A, Vector3D B) {
+	float x, y, z;
+	x = A.x + B.x;
+	y = A.y + B.y;
+	z = A.z + B.z;
+	return vectorXYZ(x, y, z);
+}
 
 /* Soustraction de vecteurs */
 Vector3D subVectors(Vector3D A, Vector3D B);
