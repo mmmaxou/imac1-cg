@@ -17,7 +17,7 @@
 void run_all_tests() {
 	int fails = 0;
 	printf(CYAN "-------------------------------------------\n");
-	printf("Test running:\n");
+	printf("Test GEOMETRY:\n");
 	fails += TEST_point_creation();
 	fails += TEST_vector_creation();
 	fails += TEST_vector_from_A_B();
@@ -29,6 +29,15 @@ void run_all_tests() {
 	fails += TEST_dot();
 	fails += TEST_norm();
 	fails += TEST_normalize();
+	printf("FAILS : %d\n", fails);
+	printf("-------------------------------------------\n");
+	fails = 0;
+	printf("Test COLORS:\n");
+	fails += TEST_addColors();
+	fails += TEST_subColors();
+	fails += TEST_multColors();
+	fails += TEST_multColor();
+	fails += TEST_divColor();
 	printf("FAILS : %d\n", fails);
 	printf("-------------------------------------------\n");
 	printf(RESET);
@@ -48,7 +57,6 @@ int TEST_point_creation() {
 	printf(" > TEST_point_creation (%d)\n", fail);
 	return fail;
 }
-
 int TEST_vector_creation() {
 	int fail = 0;
 	Vector3D v = vectorXYZ(-5, 26.5, 8);
@@ -60,7 +68,6 @@ int TEST_vector_creation() {
 	printf(" > TEST_vector_creation (%d)\n", fail);
 	return fail;
 }
-
 int TEST_vector_from_A_B() {
 	int fail = 0;
 	float x1 = 15.5;
@@ -80,7 +87,6 @@ int TEST_vector_from_A_B() {
 	printf(" > TEST_vector_from_A_B (%d)\n", fail);
 	return fail;
 }
-
 int TEST_point_plus_vector() {
 	int fail = 0;
 	float x1 = 15.5;
@@ -101,7 +107,6 @@ int TEST_point_plus_vector() {
 	return fail;
 	
 }
-
 int TEST_add() {
 	
 	int fail = 0;
@@ -122,7 +127,6 @@ int TEST_add() {
 	printf(" > TEST_vector_add (%d)\n", fail);
 	return fail;
 }
-
 int TEST_sub() {	
 	int fail = 0;
 	float x1 = 15.5;
@@ -142,7 +146,6 @@ int TEST_sub() {
 	printf(" > TEST_vector_sub (%d)\n", fail);
 	return fail;
 }
-
 int TEST_mult() {
 	int fail = 0;
 	float x = 15.5;
@@ -159,7 +162,6 @@ int TEST_mult() {
 	printf(" > TEST_vector_mult (%d)\n", fail);
 	return fail;	
 }
-
 int TEST_div() {	
 	int fail = 0;
 	float x = 15.5;
@@ -176,7 +178,6 @@ int TEST_div() {
 	printf(" > TEST_vector_div (%d)\n", fail);
 	return fail;
 }
-
 int TEST_dot() {
 	int fail = 0;
 	float x1 = 15.5;
@@ -193,7 +194,6 @@ int TEST_dot() {
 	printf(" > TEST_vector_dot (%d)\n", fail);
 	return fail;
 }
-
 int TEST_norm() {	
 	int fail = 0;
 	float x = 15.5;
@@ -219,6 +219,37 @@ int TEST_normalize() {
 	printf(" > TEST_vector_normalize (%d)\n", fail);
 	return fail;
 	
+}
+
+int TEST_addColors(){
+	int fails = 0;
+	
+	printf("TEST_addColors (%d)\n", fails);
+	return fails;
+}
+int TEST_subColors(){
+	int fails = 0;
+	
+	printf("TEST_subColors (%d)\n", fails);
+	return fails;
+}
+int TEST_multColors(){
+	int fails = 0;
+	
+	printf("TEST_multColors (%d)\n", fails);
+	return fails;
+}
+int TEST_multColor(){
+	int fails = 0;
+	
+	printf("TEST_multColor (%d)\n", fails);
+	return fails;
+}
+int TEST_divColor(){
+	int fails = 0;
+	
+	printf("TEST_divColor (%d)\n", fails);
+	return fails;
 }
 
 void displayPoint(Point3D p) {
