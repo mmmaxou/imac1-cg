@@ -2,8 +2,10 @@
 #define TEST_H
 
 #include "geometry.h"
+#include "colors.h"
 
 void run_all_tests();
+void run_case_tests();
 
 /* GEOMETRY */
 int TEST_point_creation();
@@ -26,5 +28,6 @@ int TEST_subColors();
 int TEST_multColors();
 int TEST_multColor();
 int TEST_divColor();
+void displayColor(Color3f c);
 
 #endif

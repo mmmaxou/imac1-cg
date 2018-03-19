@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "geometry.h"
 #include "test.h"
 
 /* Couleurs */
@@ -41,6 +40,30 @@ void run_all_tests() {
 	printf("FAILS : %d\n", fails);
 	printf("-------------------------------------------\n");
 	printf(RESET);
+}
+void run_case_tests() {
+	int allFails = 0;
+	int fails = 0;
+	Point3D p;
+	Vector3D v;
+	printf(CYAN "-------------------------------------------\n");
+	printf("Test CASES:\n");
+	
+	/* ------------ */
+	
+	fails = 0;
+	p = pointPlusVector(pointXYZ(0, 0, 0), vectorXYZ(1, 2, 0));
+	fails += p.x == 1 ? 0 : 0;
+	fails += p.x == 2 ? 0 : 0;
+	fails += p.x == 0 ? 0 : 0;
+	allFails += fails;
+	printf(" > TEST_pointPlusVector: (%d)\n", fails);
+	
+	
+	printf("FAILS : %d\n", fails);
+	printf("-------------------------------------------\n");
+	printf(RESET);
+	
 }
 
 int TEST_point_creation() {
@@ -224,38 +247,109 @@ int TEST_normalize() {
 int TEST_addColors(){
 	int fails = 0;
 	
-	printf("TEST_addColors (%d)\n", fails);
+	float r1 = 0.2;
+	float g1 = 0.6;
+	float b1 = 0.5;
+	float r2 = 0.5;
+	float g2 = 0.1;
+	float b2 = 0.9;
+	
+	Color3f c1 = color(r1, g1, b1);
+	Color3f c2 = color(r2, g2, b2);
+	
+	Color3f c3 = addColors(c1, c2);
+	fails += c3.r > 1 || c3.r < 0 ? 1 : 0;
+	fails += c3.g > 1 || c3.g < 0 ? 1 : 0;
+	fails += c3.b > 1 || c3.b < 0 ? 1 : 0;
+	
+	printf(" > TEST_addColors (%d)\n", fails);
 	return fails;
 }
 int TEST_subColors(){
 	int fails = 0;
 	
-	printf("TEST_subColors (%d)\n", fails);
+	float r1 = 0.2;
+	float g1 = 0.6;
+	float b1 = 0.5;
+	float r2 = 0.5;
+	float g2 = 0.1;
+	float b2 = 0.9;
+	
+	Color3f c1 = color(r1, g1, b1);
+	Color3f c2 = color(r2, g2, b2);
+	
+	Color3f c3 = subColors(c1, c2);
+	fails += c3.r > 1 || c3.r < 0 ? 1 : 0;
+	fails += c3.g > 1 || c3.g < 0 ? 1 : 0;
+	fails += c3.b > 1 || c3.b < 0 ? 1 : 0;
+	
+	printf(" > TEST_subColors (%d)\n", fails);
 	return fails;
 }
 int TEST_multColors(){
 	int fails = 0;
 	
-	printf("TEST_multColors (%d)\n", fails);
+	float r1 = 0.2;
+	float g1 = 0.6;
+	float b1 = 0.5;
+	float r2 = 0.5;
+	float g2 = 0.1;
+	float b2 = 0.9;
+	
+	Color3f c1 = color(r1, g1, b1);
+	Color3f c2 = color(r2, g2, b2);
+	
+	Color3f c3 = multColors(c1, c2);
+	fails += c3.r > 1 || c3.r < 0 ? 1 : 0;
+	fails += c3.g > 1 || c3.g < 0 ? 1 : 0;
+	fails += c3.b > 1 || c3.b < 0 ? 1 : 0;
+	
+	printf(" > TEST_multColors (%d)\n", fails);
 	return fails;
 }
 int TEST_multColor(){
 	int fails = 0;
 	
-	printf("TEST_multColor (%d)\n", fails);
+	float r = 0.2;
+	float g = 0.6;
+	float b = 0.5;
+	float scalaire = 1.3;
+	
+	Color3f c1 = color(r, g, b);	
+	Color3f c2 = multColor(c1, scalaire);
+	
+	fails += c2.r > 1 || c2.r < 0 ? 1 : 0;
+	fails += c2.g > 1 || c2.g < 0 ? 1 : 0;
+	fails += c2.b > 1 || c2.b < 0 ? 1 : 0;
+	
+	printf(" > TEST_multColors (%d)\n", fails);
 	return fails;
 }
 int TEST_divColor(){
 	int fails = 0;
 	
-	printf("TEST_divColor (%d)\n", fails);
+	float r = 0.2;
+	float g = 0.6;
+	float b = 0.5;
+	float scalaire = 1.3;
+	
+	Color3f c1 = color(r, g, b);	
+	Color3f c2 = divColor(c1, scalaire);
+	
+	fails += c2.r > 1 || c2.r < 0 ? 1 : 0;
+	fails += c2.g > 1 || c2.g < 0 ? 1 : 0;
+	fails += c2.b > 1 || c2.b < 0 ? 1 : 0;
+	
+	printf(" > TEST_divColor (%d)\n", fails);
 	return fails;
 }
 
+void displayColor(Color3f c) {
+	printf("Color(%f|%f|%f)\n", c.r, c.g, c.b);	
+}
 void displayPoint(Point3D p) {
 	printf("Point(%f|%f|%f)\n", p.x, p.y, p.z);
 }
-
 void displayVector(Vector3D v) {
 	printf("Vector(%f|%f|%f)\n", v.x, v.y, v.z);
 }
