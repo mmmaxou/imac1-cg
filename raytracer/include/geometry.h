@@ -28,7 +28,7 @@ Vector3D subVectors(Vector3D A, Vector3D B);
 /* Multiplication de vecteurs */
 Vector3D multVectors(Vector3D V, float a);
 
-/* Multiplication de vecteurs */
+/* Division de vecteurs */
 Vector3D divVectors(Vector3D V, float a);
 
 /* Produit scalaire de deux vecteurs */
