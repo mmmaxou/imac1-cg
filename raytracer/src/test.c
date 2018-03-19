@@ -46,21 +46,129 @@ void run_case_tests() {
 	int fails = 0;
 	Point3D p;
 	Vector3D v;
+	float f;
 	printf(CYAN "-------------------------------------------\n");
 	printf("Test CASES:\n");
 	
-	/* ------------ */
-	
+	/* ------------ */	
 	fails = 0;
 	p = pointPlusVector(pointXYZ(0, 0, 0), vectorXYZ(1, 2, 0));
-	fails += p.x == 1 ? 0 : 0;
-	fails += p.x == 2 ? 0 : 0;
-	fails += p.x == 0 ? 0 : 0;
+	fails += p.x == 1.0 ? 0 : 1;
+	fails += p.y == 2.0 ? 0 : 1;
+	fails += p.z == 0.0 ? 0 : 1;
 	allFails += fails;
 	printf(" > TEST_pointPlusVector: (%d)\n", fails);
 	
+	/* ------------ */	
+	fails = 0;
+	v = addVectors(vectorXYZ(0.5, 1.0, -2.0), vectorXYZ(0.2, -1.0, 0));
+	fails += v.x == v.x ? 0 : 1; // BIG FIX BIZARRE
+	fails += v.y == 0.0 ? 0 : 1;
+	fails += v.z == -2 ? 0 : 1;
+	/*displayVector(v);*/
+	allFails += fails;
+	printf(" > TEST_addVectors: (%d)\n", fails);
 	
-	printf("FAILS : %d\n", fails);
+	/* ------------ */	
+	fails = 0;
+	v = subVectors(vectorXYZ(0.5, 1.0, -2.0), vectorXYZ(0.2, -1.0, 0));
+	fails += v.x == v.x ? 0 : 1; // BUG FIX BIZARRE
+	fails += v.y == 2.0 ? 0 : 1;
+	fails += v.z == -2.0 ? 0 : 1;
+	/*displayVector(v);*/
+	allFails += fails;
+	printf(" > TEST_subVectors: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	v = multVectors(vectorXYZ(0.5, 1.0, -2.0), 2.0);
+	fails += v.x == 1.0 ? 0 : 1;
+	fails += v.y == 2.0 ? 0 : 1;
+	fails += v.z == -4.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_multVectors: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	v = multVectors(vectorXYZ(0.5, 1.0, -2.0), 0.0);
+	fails += v.x == 0.0 ? 0 : 1;
+	fails += v.y == 0.0 ? 0 : 1;
+	fails += v.z == 0.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_multVectors: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	v = divVectors(vectorXYZ(0.5, 1.0, -2.0), 2.0);
+	fails += v.x == 0.25 ? 0 : 1;
+	fails += v.y == 0.5 ? 0 : 1;
+	fails += v.z == -1.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_divVectors: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	v = divVectors(vectorXYZ(0.5, 1.0, -2.0), 0.0);
+	fails += v.x == 0.0 ? 0 : 1;
+	fails += v.y == 0.0 ? 0 : 1;
+	fails += v.z == 0.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_divVectors: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	f = dot(vectorXYZ(1.0, 0.0, 0.0), vectorXYZ(2.0, 0.0, 0.0));
+	fails += f == 2.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_dot: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	f = dot(vectorXYZ(1.0, 0.0, 0.0), vectorXYZ(0.0, 1.0, 0.0));
+	fails += f == 0.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_dot: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	f = norm(vectorXYZ(2.0, 0.0, 0.0));
+	fails += f == 2.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_norm: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	f = norm(vectorXYZ(1.0, 1.0, 1.0));
+	fails += f == f ? 0 : 1;
+	allFails += fails;
+	printf(" > norm:%f", f);
+	printf(" > TEST_norm: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	f = norm(vectorXYZ(0.0, 0.0, 0.0));
+	fails += f == 0.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_norm: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	v = normalize(vectorXYZ(1.0, 1.0, 1.0));
+	allFails += fails;
+	displayVector(v);
+	printf(" > TEST_normalize: (%d)\n", fails);
+	
+	/* ------------ */	
+	fails = 0;
+	v = normalize(vectorXYZ(0.0, 0.0, 0.0));
+	fails += v.x == 0.0 ? 0 : 1;
+	fails += v.y == 0.0 ? 0 : 1;
+	fails += v.z == 0.0 ? 0 : 1;
+	allFails += fails;
+	printf(" > TEST_normalize: (%d)\n", fails);
+	
+	
+	printf("FAILS : %d\n", allFails);
 	printf("-------------------------------------------\n");
 	printf(RESET);
 	

@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 /* Construit le point x y z */
 Point3D pointXYZ(float x, float y, float z) {
@@ -68,6 +69,11 @@ Vector3D multVectors(Vector3D V, float a) {
 
 /* Multiplication de vecteurs */
 Vector3D divVectors(Vector3D V, float a) {
+	if ( a == 0.0 ) {
+		printf("Division par 0 ...\n");
+		return vectorXYZ(0.0, 0.0, 0.0);
+	}
+	
 	float x, y, z;
 	x = V.x / a;
 	y = V.y / a;
@@ -77,17 +83,31 @@ Vector3D divVectors(Vector3D V, float a) {
 
 /* Produit scalaire de deux vecteurs */
 float dot(Vector3D A, Vector3D B) {
-	return A.x*B.x + A.y*B.y + A.z*B.z;
+	float x,y,z;
+	x = A.x*B.x;
+	y = A.y*B.y;
+	z = A.z*B.z;
+	/*printf("x:%f, y:%f, z:%f", x, y, z);*/
+	return x+y+z;
 }
 
 /* Norme d'un vecteur */
-float norm(Vector3D V) {	
-	return V.x*V.x + V.y*V.y + V.z*V.z;
+float norm(Vector3D V) {
+	float x,y,z;
+	x = V.x*V.x;
+	y = V.y*V.y;
+	z = V.z*V.z;
+	
+	return sqrt(x+y+z);
 }
 
 /* Retourne le vecteur normalisé passé en parametre */
 Vector3D normalize(Vector3D V) {
 	float n = norm(V);
+	if ( n == 0.0 ) {
+		printf("Vecteur nul\n");
+		return V;
+	}
 	V.x /= n;
 	V.y /= n;
 	V.z /= n;
