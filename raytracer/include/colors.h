@@ -5,7 +5,6 @@ typedef struct Color3f {
 	float r,g,b;
 } Color3f;
 
-
 Color3f color(float r, float g, float b);
 
 /* Fonction qui calcule la somme de deux couleurs */

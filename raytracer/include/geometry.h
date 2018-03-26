@@ -5,7 +5,7 @@ typedef struct Vec3 {
 	float x,y,z;
 } Point3D, Vector3D;
 
-/* _____________ Fonction def _____________ */
+/* _____colornction def _____________ */
 
 /* Construit le point x y z */
 Point3D pointXYZ(float x, float y, float z);

@@ -1,11 +1,14 @@
 #ifndef TEST_H
 #define TEST_H
 
+#include "shape.h"
 #include "geometry.h"
 #include "colors.h"
+#include "raytracer.h"
 
-void run_all_tests();
+void run_geometry_tests();
 void run_case_tests();
+void run_intersect_tests();
 
 /* GEOMETRY */
 int TEST_point_creation();
@@ -29,5 +32,9 @@ int TEST_multColors();
 int TEST_multColor();
 int TEST_divColor();
 void displayColor(Color3f c);
+
+/* INTERSECTS */
+int TEST_intersectsSphere();
+int TEST_intersectsCube();
 
 #endif
