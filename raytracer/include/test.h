@@ -9,6 +9,7 @@
 void run_geometry_tests();
 void run_case_tests();
 void run_intersect_tests();
+void run_scene_tests();
 
 /* GEOMETRY */
 int TEST_point_creation();
@@ -35,5 +36,10 @@ void displayColor(Color3f c);
 
 /* INTERSECTS */
 int TEST_intersectsSphere();
+
+/* SCENE */
+int TEST_createScene();
+int TEST_addSphereToScene();
+int TEST_throwRayOnScene();
 
 #endif

@@ -182,6 +182,17 @@ void run_intersect_tests() {
 	printf("-------------------------------------------\n");
 	printf(RESET);
 }
+void run_scene_tests() {
+	int fails = 0;
+	printf(CYAN "-------------------------------------------\n");
+	printf("Test SCENE:\n");
+	fails += TEST_createScene();
+	fails += TEST_addSphereToScene();
+	fails += TEST_throwRayOnScene();
+	printf("FAILS : %d\n", fails);
+	printf("-------------------------------------------\n");
+	printf(RESET);
+}
 
 int TEST_point_creation() {
 	int fail = 0;
@@ -487,6 +498,81 @@ int TEST_intersectsSphere() {
 	
 	printf(" > TEST_intersectsSphere (%d)\n", fails);
 	return fails;
+}
+
+int TEST_createScene() {
+	int fails = 0;
+	
+	Scene scene = createScene();
+	fails += scene.tailleSphere != 0 ? 1 : 0;
+	
+	printf(" > TEST_createScene (%d)\n", fails);
+	return fails;	
+}
+int TEST_addSphereToScene() {
+	int fails = 0;
+	
+	Scene scene = createScene();
+	
+	float r = 0.2;
+	float g = 0.6;
+	float b = 0.5;
+	Color3f c = color(r, g, b);
+	
+	
+	float x = 0;
+	float y = 0;
+	float z = 0;
+	Point3D p = pointXYZ(x, y, z);
+	Sphere s = createSphere(p, 1, c);
+	
+	addSphereToScene(&scene, s);
+	
+	fails += scene.tailleSphere != 1 ? 1 : 0;
+	
+	printf(" > TEST_addSphereToScene (%d)\n", fails);
+	return fails;	
+}
+int TEST_throwRayOnScene() {
+	int fails = 0;
+	int nb1 = 0, nb2 = 0, nb3 = 0;
+	Intersection i;
+	
+	/* RAY */
+	Point3D rayOrigin1 = pointXYZ(0,1,0);
+	Point3D rayOrigin2 = pointXYZ(0,0,0);
+	Point3D rayOrigin3 = pointXYZ(0,2,0);
+	Vector3D rayDirection = pointXYZ(1,0,1);
+	normalize(rayDirection);
+	Ray r1 = createRay(rayOrigin1, rayDirection);
+	Ray r2 = createRay(rayOrigin2, rayDirection);
+	Ray r3 = createRay(rayOrigin3, rayDirection);
+	
+	/* SPHERE */
+	Point3D O = pointXYZ(0,0,0);
+	Color3f col = color(0.1, 0.6, 0.7);	
+	Sphere s = createSphere(O, 1, col);
+	
+	/* Creation de scene */
+	Scene scene = createScene();
+	/* Ajout a la scene */
+	addSphereToScene(&scene, s);
+	
+	
+	nb1 = throwRayOnScene(r1, &scene, &i);
+	//nb2 = throwRayOnScene(r2, &scene, &i);
+	//nb3 = throwRayOnScene(r3, &scene, &i);
+	
+	/*fails += intersectsSphere(r1, s, &i) == 1 ? 0 : 1;
+	fails += intersectsSphere(r2, s, &i) == 1 ? 0 : 1;
+	fails += intersectsSphere(r3, s, &i) == 0 ? 0 : 1;*/
+		
+	fails += nb1 != 1 ? 1 : 0;
+	fails += nb2 != 1 ? 1 : 0;
+	fails += nb3 != 0 ? 1 : 0;
+	
+	printf(" > TEST_throwRayOnScene (%d)\n", fails);
+	return fails;	
 }
 
 void displayColor(Color3f c) {
