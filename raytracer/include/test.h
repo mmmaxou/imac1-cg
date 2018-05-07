@@ -35,6 +35,5 @@ void displayColor(Color3f c);
 
 /* INTERSECTS */
 int TEST_intersectsSphere();
-int TEST_intersectsCube();
 
 #endif

@@ -16,6 +16,10 @@ typedef struct Intersection {
 	Color3f color;
 } Intersection;
 
+typedef struct Scene {
+	Sphere spheres[20];
+} Scene;
+
 Ray createRay(Point3D origin, Vector3D direction);
 /* 
 	Teste si le rayon intersecte la sphere
@@ -23,11 +27,5 @@ Ray createRay(Point3D origin, Vector3D direction);
 	Sinon, renvoi 0
 */
 int intersectsSphere(Ray r, Sphere s, Intersection *i);
-/* 
-	Teste si le rayon intersecte le cube
-	Rempli les champs de l'intersection si oui et renvoi 1
-	Sinon, renvoi 0
-*/
-int intersectsCube(Ray r, Cube c, Intersection *i);
 
 #endif

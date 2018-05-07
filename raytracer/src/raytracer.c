@@ -87,31 +87,3 @@ int intersectsSphere(Ray r, Sphere s, Intersection *i) {
 	i->color = s.color;	
 	return 1;
 }
-
-/* 
-	Teste si le rayon intersecte le cube
-	Rempli les champs de l'intersection si oui et renvoi 1
-	Sinon, renvoi 0
-*/
-int intersectsCube(Ray r, Cube c, Intersection *i) {
-	/* On determine 6 plans */
-	
-	/* Test pour x */
-	/* Dessus : Y = Xmax.Y */
-	
-	/* Dessous : Y = Xmin.Y */
-	
-	
-	
-	
-	
-	/* Test pour y */
-	
-	
-	/* Test pour z */
-	
-	
-	
-	
-	return 1;
-}

@@ -178,7 +178,6 @@ void run_intersect_tests() {
 	printf(CYAN "-------------------------------------------\n");
 	printf("Test INTERSECT:\n");
 	fails += TEST_intersectsSphere();
-	fails += TEST_intersectsCube();
 	printf("FAILS : %d\n", fails);
 	printf("-------------------------------------------\n");
 	printf(RESET);
@@ -487,35 +486,6 @@ int TEST_intersectsSphere() {
 	fails += intersectsSphere(r3, s, &i) == 0 ? 0 : 1;
 	
 	printf(" > TEST_intersectsSphere (%d)\n", fails);
-	return fails;
-}
-int TEST_intersectsCube() {
-	int fails = 0;
-	
-	Intersection i;
-	
-		/* RAY */
-	Point3D rayOrigin1 = pointXYZ(0,1,0);
-	Point3D rayOrigin2 = pointXYZ(0,0,0);
-	Point3D rayOrigin3 = pointXYZ(0,2,0);
-	Vector3D rayDirection = pointXYZ(1,0,1);
-	normalize(rayDirection);	
-	Ray r1 = createRay(rayOrigin1, rayDirection);
-	Ray r2 = createRay(rayOrigin2, rayDirection);
-	Ray r3 = createRay(rayOrigin3, rayDirection);
-	
-	/* CUBE */
-	Point3D min = pointXYZ(1,1,1);
-	Point3D max = pointXYZ(-1,-1,-1);
-	Color3f col = color(0.1, 0.6, 0.7);	
-	Cube c = createCube(min, max, col);
-	
-	fails += intersectsCube(r1, c, &i) == 1 ? 0 : 1;
-	fails += intersectsCube(r2, c, &i) == 1 ? 0 : 1;
-	fails += intersectsCube(r3, c, &i) == 0 ? 0 : 1;
-	
-	
-	printf(" > TEST_intersectsCube (%d)\n", fails);
 	return fails;
 }
 
